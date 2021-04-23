@@ -109,4 +109,5 @@ void birthdaysong() {
   playNote(NOTE_G4, QUARTER);
   playNote(NOTE_A4, QUARTER);
   playNote(NOTE_G4, HALF);          // Bar 8
+}
 
