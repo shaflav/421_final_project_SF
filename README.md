@@ -6,4 +6,4 @@ This code should be run on an Adafruit Circuit Playground. Any edition of hardwa
 
 Just connect the Circuit Playground the a computer with a USB cable, open the file in the Arduino software and upload. 
 ## Copyright
-The Happy Birthday song was adapted from the Birthday Candles demo in the Arduino software (Author: Tony DiCola, License: MIT (https://opensource.org/licenses/MIT)). The Pink Panther theme song was adapted from https://github.com/robsoncouto/arduino-songs
+The Happy Birthday song was adapted from the Birthday Candles demo in the Arduino software (Author: Tony DiCola, License: MIT (https://opensource.org/licenses/MIT)). The Pink Panther theme and Harry Potter theme songs were adapted from https://github.com/robsoncouto/arduino-songs. 
