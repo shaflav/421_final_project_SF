@@ -1,6 +1,10 @@
+
 #include <Adafruit_CircuitPlayground.h>
 
 int value;
+int songchoice;
+const int ledPin =  13; // the number of the LED pin
+int ledState = LOW;
 
 // A few music note frequencies as defined in this tone example:
 //   https://www.arduino.cc/en/Tutorial/toneMelody
@@ -28,6 +32,7 @@ int value;
 #define NOTE_A5  880
 #define NOTE_AS5 932
 #define NOTE_B5  988
+#define REST 0
 
 // Define note durations.  You only need to adjust the whole note
 // time and other notes will be subdivided from it directly.
@@ -37,10 +42,15 @@ int value;
 #define EIGHTH        QUARTER/2
 #define EIGHTH_TRIPLE QUARTER/3
 #define SIXTEENTH     EIGHTH/2
+#define DOT_HALF          HALF + QUARTER
+#define DOT_QUARTER       QUARTER + EIGHTH
+#define DOT_EIGHTH        EIGHTH + SIXTEENTH
+#define DOT_SIXTEENTH     SIXTEENTH + (SIXTEENTH/2)
 
 
 void setup() {
   Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
   CircuitPlayground.begin();
   CircuitPlayground.clearPixels();
 }
@@ -50,64 +60,183 @@ void loop() {
   value = CircuitPlayground.lightSensor();
   Serial.print("Raw:");
   Serial.println(value);
-  value = map(value, 0,255,0,255);
-  // start timer if value decreases by 50%
+  value = map(value, 0, 255, 0, 255);
+  songchoice = random(0,2);
   if (value <= 10) {
-    CircuitPlayground.setPixelColor(1, 0, 255, 0);
-    birthdaysong();
-    delay(2000);
-  }
-    else{
-      CircuitPlayground.clearPixels();
+    // line here would initiate solenoid (water valve)
+    digitalWrite(ledPin, HIGH);
+    if (songchoice == 0) {
+
+      pinkpanther();
+      pinkpanther();
+    }
+    
+    if (songchoice == 1) {
+      birthdaysong();
+      //birthdaysong();
+    }
+
+    if (songchoice == 2) {
+      harrypotter();
     }
 
 
-//    // scale range to Lux units
-//    value = map(value,0,1023,0,1500);
-//    Serial.print("Lux:");
-//    Serial.println(value);
-
-  // light up LEDs
-  //  for (int i = 0; i<10; i++) {
-  //  CircuitPlayground.setPixelColor(i,255,255,255);
-  //  }
-
-
+    delay(500);
+    for (int i = 0; i < 10; i++) {
+      CircuitPlayground.setPixelColor(i, 0, 255, 0);
+    }
+    delay(500);
+    CircuitPlayground.clearPixels();
+    delay(500);
+    for (int i = 0; i < 10; i++) {
+      CircuitPlayground.setPixelColor(i, 0, 255, 0);
+    }
+    delay(500);
+    CircuitPlayground.clearPixels();
+    delay(500);
+    for (int i = 0; i < 10; i++) {
+      CircuitPlayground.setPixelColor(i, 0, 255, 0);
+    }
+    delay(500);
+    CircuitPlayground.clearPixels();
+    delay(500);
+  }
+  else {
+    CircuitPlayground.clearPixels();
+    digitalWrite(ledPin, LOW);
+  }
 
   delay(100);
 }
 
-void playNote(int frequency, int duration, bool hold=false, bool measure=true) {
-    CircuitPlayground.playTone(frequency, duration + duration/32, false);
-  }
+
+void playNote(int frequency, int duration) {
+  CircuitPlayground.playTone(frequency, duration, false);
+}
 
 
 // plays the birthday song
 void birthdaysong() {
-  playNote(NOTE_D4, EIGHTH, true);
+
   playNote(NOTE_D4, EIGHTH);
-  playNote(NOTE_E4, QUARTER);       // Bar 1
+  playNote(NOTE_D4, EIGHTH);
+  playNote(NOTE_E4, QUARTER);        // Bar 1
+  CircuitPlayground.setPixelColor(0, 255, 255, 255);
   playNote(NOTE_D4, QUARTER);
   playNote(NOTE_G4, QUARTER);
+  CircuitPlayground.setPixelColor(1, 255, 255, 255);
   playNote(NOTE_FS4, HALF);         // Bar 2
-  playNote(NOTE_D4, EIGHTH, true);
+  CircuitPlayground.setPixelColor(2, 255, 255, 255);
+  playNote(NOTE_D4, EIGHTH);
   playNote(NOTE_D4, EIGHTH);
   playNote(NOTE_E4, QUARTER);       // Bar 3
+  CircuitPlayground.setPixelColor(3, 255, 255, 255);
   playNote(NOTE_D4, QUARTER);
   playNote(NOTE_A4, QUARTER);
+  CircuitPlayground.setPixelColor(4, 255, 255, 255);
   playNote(NOTE_G4, HALF);          // Bar 4
-  playNote(NOTE_D4, EIGHTH, true);
+  CircuitPlayground.setPixelColor(5, 255, 255, 255);
+  playNote(NOTE_D4, EIGHTH);
   playNote(NOTE_D4, EIGHTH);
   playNote(NOTE_D5, QUARTER);       // Bar 5
+  CircuitPlayground.setPixelColor(6, 255, 255, 255);
   playNote(NOTE_B4, QUARTER);
   playNote(NOTE_G4, QUARTER);
+  CircuitPlayground.setPixelColor(7, 255, 255, 255);
   playNote(NOTE_FS4, QUARTER);      // Bar 6
   playNote(NOTE_E4, QUARTER);
-  playNote(NOTE_C5, EIGHTH, true);
+  CircuitPlayground.setPixelColor(8, 255, 255, 255);
+  playNote(NOTE_C5, EIGHTH);
   playNote(NOTE_C5, EIGHTH);
   playNote(NOTE_B4, QUARTER);       // Bar 7
+  CircuitPlayground.setPixelColor(9, 255, 255, 255);
   playNote(NOTE_G4, QUARTER);
   playNote(NOTE_A4, QUARTER);
+  CircuitPlayground.setPixelColor(0, 255, 255, 255);
   playNote(NOTE_G4, HALF);          // Bar 8
+  CircuitPlayground.clearPixels();
+
+void pinkpanther() {
+  playNote(REST, HALF);
+  playNote(REST, QUARTER);
+  playNote(REST, EIGHTH);
+  CircuitPlayground.setPixelColor(0, 255, 255, 255);
+  playNote(NOTE_DS4, EIGHTH);
+  playNote(NOTE_E4, DOT_QUARTER);
+  CircuitPlayground.setPixelColor(1, 255, 255, 255);
+  playNote(REST, EIGHTH);
+  playNote(NOTE_FS4, EIGHTH);
+  CircuitPlayground.setPixelColor(2, 255, 255, 255);
+  playNote(NOTE_G4, DOT_QUARTER);
+  playNote(REST, EIGHTH);
+  playNote(NOTE_DS4, EIGHTH);
+  CircuitPlayground.setPixelColor(3, 255, 255, 255);
+  playNote(NOTE_E4, DOT_EIGHTH);
+  playNote(NOTE_FS4, EIGHTH);
+  CircuitPlayground.setPixelColor(4, 255, 255, 255);
+  playNote(NOTE_G4, DOT_EIGHTH);
+  playNote(NOTE_C5, EIGHTH);
+  playNote(NOTE_B4, DOT_EIGHTH);
+  CircuitPlayground.setPixelColor(5, 255, 255, 255);
+  playNote(NOTE_E4, EIGHTH);
+  playNote(NOTE_G4, DOT_EIGHTH);
+  playNote(NOTE_B4, EIGHTH);
+  CircuitPlayground.setPixelColor(6, 255, 255, 255);
+  playNote(NOTE_AS4, HALF);
+  CircuitPlayground.setPixelColor(7, 255, 255, 255);
+  playNote(NOTE_A4, SIXTEENTH);
+  playNote(NOTE_G4, SIXTEENTH);
+  playNote(NOTE_E4, SIXTEENTH);
+  playNote(NOTE_D4, SIXTEENTH );
+  CircuitPlayground.setPixelColor(8, 255, 255, 255);
+  playNote(NOTE_E4, HALF);
+  CircuitPlayground.setPixelColor(9, 255, 255, 255);
+  playNote(REST, QUARTER);
+  playNote( REST, HALF);
+  CircuitPlayground.clearPixels();
 }
+
+void harrypotter() {
+  playNote(REST, HALF);
+  playNote(NOTE_D4, QUARTER);
+  playNote(NOTE_G4, DOT_QUARTER);
+  playNote(NOTE_AS4, EIGHTH);
+  playNote(NOTE_A4, QUARTER);
+  playNote(NOTE_G4, HALF);
+  playNote(NOTE_D5, QUARTER);
+  playNote(NOTE_C5, DOT_HALF);
+
+  playNote(NOTE_A4, DOT_HALF);
+  playNote(NOTE_G4, DOT_QUARTER);
+  playNote(NOTE_AS4, EIGHTH);
+  playNote(NOTE_A4, QUARTER);
+
+  playNote(NOTE_F4, HALF);
+  playNote(NOTE_GS4, QUARTER);
+  playNote(NOTE_D4, DOT_HALF);
+  playNote(NOTE_D4, QUARTER);
+
+  playNote(NOTE_G4, DOT_QUARTER);
+  playNote(NOTE_AS4, EIGHTH);
+  playNote(NOTE_A4, QUARTER);
+  playNote(NOTE_G4, HALF);
+  playNote(NOTE_D5, QUARTER);
+  playNote(NOTE_F5, HALF);
+  playNote(NOTE_E5, QUARTER);
+  playNote(NOTE_DS5, HALF);
+  playNote(NOTE_B4, QUARTER);
+  playNote(NOTE_DS5, DOT_QUARTER);
+  playNote(NOTE_D5, EIGHTH);
+  playNote(NOTE_CS5, QUARTER);
+
+
+  playNote(NOTE_CS4, HALF);
+  playNote(NOTE_DS5, HALF);
+  playNote(NOTE_B4, QUARTER);
+}
+
+
+
+
+
 
